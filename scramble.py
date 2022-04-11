@@ -26,7 +26,10 @@ def main(argv):
     print("\n ~~~~~~  *  RESULTS   *  ~~~~~~ ")
     
     n,m = madara.shape
-    cpy = madara
+    cpy = np.zeros((n,m))
+    for i in range(n):
+        for j in range(m):
+            cpy[i][j] = madara[i][j]
 
     len = m
     # setting regions where first 2 regions are already decided
@@ -54,8 +57,11 @@ def main(argv):
     im = Image.fromarray(madara).convert("L")
     im.save("madara-scrambled.tif", format="TIFF")
 
-    for i in range(100, 300):
-        for j in range(100, 400):
+    x1 = 500
+    y1 = 500
+
+    for i in range(100, x1):
+        for j in range(100, y1):
             madara[i,j] = 0
 
     im = Image.fromarray(madara).convert("L")
@@ -79,38 +85,8 @@ def main(argv):
 
     im = Image.fromarray(madara).convert("L")
     im.save("reconstructed.tif", format="TIFF")
-    # start_time = time.time()
-    # exec_time = time.time() - start_time
-    # print("Transform  execution time: %.6f " % exec_time, "sec")
 
-
-    # # second reconstruct
-    # for i in range(m):
-    #     for j in range(m):
-    #         arr[i,j] = madara[i,j]
-    
-    # scrambled = arnold.applyInverseTransformTo(arr)
-
-    # for i in range(m):
-    #     for j in range(m):
-    #         madara[i,j] = scrambled[i,j]
-
-    # im = Image.fromarray(madara).convert("L")
-    # im.save("madara-reconstruct.tif", format="TIFF")
-
-    # start_time = time.time()
-    # reconstructed = arnold.applyInverseTransformTo(scrambled)
-    # exec_time = time.time() - start_time
-    # print("Inverse T. execution time: %.6f " % exec_time, "sec")
-
-    # counter = 0
-    # for i in range(scrambled.shape[0]):
-    #     for j in range(scrambled.shape[0]):
-    #         if(lena[i, j] != reconstructed[i, j]):
-    #             print(lena[i, j], " != ", reconstructed[i, j])
-    #             counter += 1
-    # print("\nDIFFERENT PIXELS\n\toriginal  VS reconstructed:\t\t", counter)
-
+    print("\n percentage of sheer cut-out: ", (x1-100)*(y1-100)/(1.0*n*m)*100,"%")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
